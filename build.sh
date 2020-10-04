@@ -23,7 +23,7 @@ fi
 # Run install.sh for cli
 chmod +x cli/dotnet-install.sh
 
-# v1 needed for some test and bootstrapping testing version
+# Get recommended version for bootstrapping testing version
 cli/dotnet-install.sh -i cli -c 1.0
 
 if [ $? -ne 0 ]; then
@@ -33,11 +33,23 @@ fi
 
 DOTNET="$(pwd)/cli/dotnet"
 
-echo "$DOTNET msbuild build/config.props /v:m /nologo /t:GetCliBranchForTesting"
+# Let the dotnet cli expand and decompress first if it's a first-run
+$DOTNET --version
 
-# run it twice so dotnet cli can expand and decompress without affecting the result of the target
-$DOTNET msbuild build/config.props /v:m /nologo /t:GetCliBranchForTesting
-DOTNET_BRANCH="$($DOTNET msbuild build/config.props /v:m /nologo /t:GetCliBranchForTesting)"
+# Get CLI Branches for testing
+echo "dotnet msbuild build/config.props /v:m /nologo /t:GetCliBranchForTesting"
+
+IFS=$'\n'
+CMD_OUT_LINES=(`$DOTNET msbuild build/config.props /v:m /nologo /t:GetCliBranchForTesting`)
+unset IFS
+
+IFS=$';'
+DOTNET_BRANCHES=(`echo ${CMD_OUT_LINES[-1]}`)
+unset IFS
+
+IFS=$' '
+DOTNET_BRANCH=(${DOTNET_BRANCHES[0]})
+unset IFS
 
 echo $DOTNET_BRANCH
 cli/dotnet-install.sh -i cli -c $DOTNET_BRANCH

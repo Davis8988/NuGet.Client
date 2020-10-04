@@ -40,14 +40,24 @@ scripts/funcTests/dotnet-install.sh -i cli -c 2.2 -NoPath
 
 DOTNET="$(pwd)/cli/dotnet"
 
+# Let the dotnet cli expand and decompress first if it's a first-run
+$DOTNET --version
 
+# Get CLI Branches for testing
 echo "dotnet msbuild build/config.props /v:m /nologo /t:GetCliBranchForTesting"
-# run it twice so dotnet cli can expand and decompress without affecting the result of the target
-dotnet msbuild build/config.props /v:m /nologo /t:GetCliBranchForTesting
-DOTNET_BRANCHES="$(dotnet msbuild build/config.props /v:m /nologo /t:GetCliBranchForTesting)"
-echo $DOTNET_BRANCHES | tr ";" "\n" |  while read -r DOTNET_BRANCH
+
+IFS=$'\n'
+CMD_OUT_LINES=(`$DOTNET msbuild build/config.props /v:m /nologo /t:GetCliBranchForTesting`)
+# Take the line just before the last empty line and remove all the spaces
+DOTNET_BRANCHES=${CMD_OUT_LINES[-1]//[[:space:]]}
+unset IFS
+
+IFS=$';'
+for DOTNET_BRANCH in ${DOTNET_BRANCHES[@]}
 do
 	echo $DOTNET_BRANCH
+
+	IFS=$':'
 	ChannelAndVersion=($DOTNET_BRANCH)
 	Channel=${ChannelAndVersion[0]}
 	if [ ${#ChannelAndVersion[@]} -eq 1 ]
@@ -56,6 +66,8 @@ do
 	else
 		Version=${ChannelAndVersion[1]}
 	fi
+	unset IFS
+
 	echo "Channel is: $Channel"
 	echo "Version is: $Version"
 	scripts/funcTests/dotnet-install.sh -i cli -c $Channel -v $Version -nopath
