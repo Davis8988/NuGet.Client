@@ -24,7 +24,7 @@ fi
 chmod +x cli/dotnet-install.sh
 
 # Get recommended version for bootstrapping testing version
-cli/dotnet-install.sh -i cli -c 1.0
+cli/dotnet-install.sh -i cli -c 2.2
 
 if [ $? -ne 0 ]; then
 	echo ".NET CLI Install failed!!"
@@ -41,21 +41,34 @@ echo "dotnet msbuild build/config.props /v:m /nologo /t:GetCliBranchForTesting"
 
 IFS=$'\n'
 CMD_OUT_LINES=(`$DOTNET msbuild build/config.props /v:m /nologo /t:GetCliBranchForTesting`)
+# Take the line just before the last empty line and remove all the spaces
+DOTNET_BRANCHES=${CMD_OUT_LINES[-1]//[[:space:]]}
 unset IFS
 
 IFS=$';'
-DOTNET_BRANCHES=(`echo ${CMD_OUT_LINES[-1]}`)
-unset IFS
+for DOTNET_BRANCH in ${DOTNET_BRANCHES[@]}
+do
+	echo $DOTNET_BRANCH
 
-IFS=$' '
-DOTNET_BRANCH=(${DOTNET_BRANCHES[0]})
-unset IFS
+	IFS=$':'
+	ChannelAndVersion=($DOTNET_BRANCH)
+	Channel=${ChannelAndVersion[0]}
+	if [ ${#ChannelAndVersion[@]} -eq 1 ]
+	then
+		Version="latest"
+	else
+		Version=${ChannelAndVersion[1]}
+	fi
+	unset IFS
 
-echo $DOTNET_BRANCH
-cli/dotnet-install.sh -i cli -c $DOTNET_BRANCH
+	echo "Channel is: $Channel"
+	echo "Version is: $Version"
+	cli/dotnet-install.sh -i cli -c $Channel -v $Version -nopath
 
-# Display current version
-$DOTNET --version
+	# Display current version
+	$DOTNET --version
+	dotnet --info
+done
 
 echo "================="
 
