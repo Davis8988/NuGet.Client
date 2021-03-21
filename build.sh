@@ -22,6 +22,7 @@ mkdir -p cli
 [ -f "cli/dotnet-install.sh" ] && echo "Error - Failed to remove dotnet-install.sh script at: 'cli/dotnet-install.sh'" && exit 1
 
 # Copy dotnet-install.sh script to 'cli' dir
+echo "Copying dotnet-install.sh script to: 'cli/'"
 cp dotnet-install.sh cli/
 
 [ ! -f "cli/dotnet-install.sh" ] && echo "Error - Failed to copy dotnet-install.sh script to: 'cli/'" && exit 1
