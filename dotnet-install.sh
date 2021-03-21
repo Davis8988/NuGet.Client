@@ -1187,6 +1187,7 @@ say "- The SDK installation doesn't need to persist across multiple CI runs."
 say "To set up a development environment or to run apps, use installers rather than this script. Visit https://dotnet.microsoft.com/download to get the installer.\n"
 
 check_min_reqs
+say_verbose "======= Calculating vars ========"
 calculate_vars
 script_name=$(basename "$0")
 
