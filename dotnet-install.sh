@@ -895,7 +895,7 @@ install_dotnet() {
 
     mkdir -p "$install_root"
     # David: zip_path="$(mktemp "$temporary_file_template")"
-    zip_path=/tmp/dotnet/dotnet-dev-debian-x64.tar.gz
+    zip_path=/tmp/dotnet/dotnet-dev-debian-x64.1.1.11.tar.gz
     # David: say_verbose "Zip path: $zip_path"
 
 
