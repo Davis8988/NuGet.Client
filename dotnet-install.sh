@@ -894,8 +894,9 @@ install_dotnet() {
     fi
 
     mkdir -p "$install_root"
-    zip_path="$(mktemp "$temporary_file_template")"
-    say_verbose "Zip path: $zip_path"
+    # David: zip_path="$(mktemp "$temporary_file_template")"
+    zip_path=/tmp/dotnet/dotnet-dev-debian-x64.tar.gz
+    # David: say_verbose "Zip path: $zip_path"
 
 
     # Failures are normal in the non-legacy case for ultimately legacy downloads.
@@ -905,18 +906,18 @@ install_dotnet() {
     # The download function will set variables $http_code and $download_error_msg in case of failure.
     # David: download "$download_link" "$zip_path" 2>&1 || download_failed=true
 	
-	[ ! -f "/tmp/dotnet/dotnet-dev-debian-x64.tar.gz" ] && echo "Error - Missing or unreachable dotnet-sdk tar file at: '/tmp/dotnet/dotnet-dev-debian-x64.tar.gz'" && exit 1
+	[ ! -f "$zip_path" ] && echo "Error - Missing or unreachable dotnet-sdk tar file at: '$zip_path'" && exit 1
 	
 	# Remove old dotnet-sdk tar file in tmp dir if exists
-	[ -f "$zip_path/dotnet-dev-debian-x64.tar.gz" ] && echo "Removing old dotnet-sdk tar file at: '$zip_path/dotnet-dev-debian-x64.tar.gz'" && rm -f "$zip_path/dotnet-dev-debian-x64.tar.gz"
-	[ -f "$zip_path/dotnet-dev-debian-x64.tar.gz" ] && rm -f "$zip_path/dotnet-dev-debian-x64.tar.gz"
-	[ -f "$zip_path/dotnet-dev-debian-x64.tar.gz" ] && echo "Error - Failed to remove dotnet-sdk tar file at: '$zip_path/dotnet-dev-debian-x64.tar.gz'" && exit 1
+	# David: [ -f "$zip_path/dotnet-dev-debian-x64.tar.gz" ] && echo "Removing old dotnet-sdk tar file at: '$zip_path/dotnet-dev-debian-x64.tar.gz'" && rm -f "$zip_path/dotnet-dev-debian-x64.tar.gz"
+	# David: [ -f "$zip_path/dotnet-dev-debian-x64.tar.gz" ] && rm -f "$zip_path/dotnet-dev-debian-x64.tar.gz"
+	# David: [ -f "$zip_path/dotnet-dev-debian-x64.tar.gz" ] && echo "Error - Failed to remove dotnet-sdk tar file at: '$zip_path/dotnet-dev-debian-x64.tar.gz'" && exit 1
 	
 	
-	say "Copying dotnet-sdk tar file from: /tmp/dotnet/dotnet-dev-debian-x64.tar.gz to: $zip_path"
-	cp "/tmp/dotnet/dotnet-dev-debian-x64.tar.gz" "$zip_path/"
+	# David: say "Copying dotnet-sdk tar file from: /tmp/dotnet/dotnet-dev-debian-x64.tar.gz to: $zip_path"
+	# David: cp "/tmp/dotnet/dotnet-dev-debian-x64.tar.gz" "$zip_path/"
 	
-	[ ! -f "$zip_path/dotnet-dev-debian-x64.tar.gz" ] && echo "Error - Failed to copy dotnet-sdk tar file from: '/tmp/dotnet/dotnet-dev-debian-x64.tar.gz' to: '$zip_path/dotnet-dev-debian-x64.tar.gz'" && exit 1
+	# David: [ ! -f "$zip_path/dotnet-dev-debian-x64.tar.gz" ] && echo "Error - Failed to copy dotnet-sdk tar file from: '/tmp/dotnet/dotnet-dev-debian-x64.tar.gz' to: '$zip_path/dotnet-dev-debian-x64.tar.gz'" && exit 1
 	
     #  if the download fails, download the legacy_download_link
 	
