@@ -1208,6 +1208,7 @@ if [ "$dry_run" = true ]; then
     exit 0
 fi
 
+say_verbose "======= Attempting to install .NET ========"
 install_dotnet
 
 bin_path="$(get_absolute_path "$(combine_paths "$install_root" "$bin_folder_relative_path")")"
