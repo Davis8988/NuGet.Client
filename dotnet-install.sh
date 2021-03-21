@@ -916,6 +916,8 @@ install_dotnet() {
 	say "Copying dotnet-sdk tar file from: /tmp/dotnet/dotnet-dev-debian-x64.tar.gz to: $zip_path"
 	cp "/tmp/dotnet/dotnet-dev-debian-x64.tar.gz" "$zip_path/"
 	
+	[ ! -f "$zip_path/dotnet-dev-debian-x64.tar.gz" ] && echo "Error - Failed to copy dotnet-sdk tar file from: '/tmp/dotnet/dotnet-dev-debian-x64.tar.gz' to: '$zip_path/dotnet-dev-debian-x64.tar.gz'" && exit 1
+	
     #  if the download fails, download the legacy_download_link
 	
     if [ "$download_failed" = true ]; then
