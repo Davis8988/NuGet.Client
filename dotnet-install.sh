@@ -905,13 +905,16 @@ install_dotnet() {
     # The download function will set variables $http_code and $download_error_msg in case of failure.
     # David: download "$download_link" "$zip_path" 2>&1 || download_failed=true
 	
+	[ ! -f "/tmp/dotnet/dotnet-dev-debian-x64.tar.gz" ] && echo "Error - Missing or unreachable dotnet-sdk tar file at: '/tmp/dotnet/dotnet-dev-debian-x64.tar.gz'" && exit 1
+	
 	# Remove old dotnet-sdk tar file in tmp dir if exists
 	[ -f "$zip_path/dotnet-dev-debian-x64.tar.gz" ] && echo "Removing old dotnet-sdk tar file at: '$zip_path/dotnet-dev-debian-x64.tar.gz'" && rm -f "$zip_path/dotnet-dev-debian-x64.tar.gz"
 	[ -f "$zip_path/dotnet-dev-debian-x64.tar.gz" ] && rm -f "$zip_path/dotnet-dev-debian-x64.tar.gz"
 	[ -f "$zip_path/dotnet-dev-debian-x64.tar.gz" ] && echo "Error - Failed to remove dotnet-sdk tar file at: '$zip_path/dotnet-dev-debian-x64.tar.gz'" && exit 1
-
-	say "Copying dotnet-sdk tar file from: /tmp/dotnet/dotnet-dev-debian-x64.tar.gz to: $zip_path"
 	
+	
+	say "Copying dotnet-sdk tar file from: /tmp/dotnet/dotnet-dev-debian-x64.tar.gz to: $zip_path"
+	cp "/tmp/dotnet/dotnet-dev-debian-x64.tar.gz" "$zip_path/"
 	
     #  if the download fails, download the legacy_download_link
 	
