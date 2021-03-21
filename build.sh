@@ -13,8 +13,18 @@ RESULTCODE=0
 # Download the CLI install script to cli
 echo "Installing dotnet CLI"
 mkdir -p cli
-echo "Downloading 'dotnet-install.sh' script from: https://dot.net/v1/dotnet-install.sh"
-curl -o cli/dotnet-install.sh -L https://dot.net/v1/dotnet-install.sh
+# echo "Downloading 'dotnet-install.sh' script from: https://dot.net/v1/dotnet-install.sh"
+# curl -o cli/dotnet-install.sh -L https://dot.net/v1/dotnet-install.sh
+
+# Remove old dotnet-install.sh script in cli dir if exists
+[ -f "cli/dotnet-install.sh" ] && echo "Removing old dotnet-install.sh script at: 'cli/dotnet-install.sh'" && rm -f "cli/dotnet-install.sh"
+[ -f "cli/dotnet-install.sh" ] && rm -f "cli/dotnet-install.sh"
+[ -f "cli/dotnet-install.sh" ] && echo "Error - Failed to remove dotnet-install.sh script at: 'cli/dotnet-install.sh'" && exit 1
+
+# Copy dotnet-install.sh script to 'cli' dir
+cp dotnet-install.sh cli/
+
+[ ! -f "cli/dotnet-install.sh" ] && echo "Error - Failed to copy dotnet-install.sh script to: 'cli/'" && exit 1
 
 # Run install.sh for cli
 echo "Adding permissions to 'cli/dotnet-install.sh' downloaded script"
