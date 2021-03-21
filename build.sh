@@ -32,8 +32,8 @@ echo "Adding permissions to 'cli/dotnet-install.sh' downloaded script"
 chmod +x cli/dotnet-install.sh
 
 # v1 needed for some test and bootstrapping testing version
-echo "Executing 'cli/dotnet-install.sh' downloaded script"
-cli/dotnet-install.sh -i cli -c 1.0 --verbose
+# David: echo "Executing 'cli/dotnet-install.sh' downloaded script"
+# David: cli/dotnet-install.sh -i cli -c 1.0 --verbose
 
 DOTNET="$(pwd)/cli/dotnet"
 
