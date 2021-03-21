@@ -17,10 +17,11 @@ echo "Downloading 'dotnet-install.sh' script from: https://dot.net/v1/dotnet-ins
 curl -o cli/dotnet-install.sh -L https://dot.net/v1/dotnet-install.sh
 
 # Run install.sh for cli
-echo "Executing 'cli/dotnet-install.sh' downloaded script"
+echo "Adding permissions to 'cli/dotnet-install.sh' downloaded script"
 chmod +x cli/dotnet-install.sh
 
 # v1 needed for some test and bootstrapping testing version
+echo "Executing 'cli/dotnet-install.sh' downloaded script"
 cli/dotnet-install.sh -i cli -c 1.0
 
 DOTNET="$(pwd)/cli/dotnet"
