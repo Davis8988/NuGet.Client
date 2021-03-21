@@ -900,12 +900,21 @@ install_dotnet() {
 
     # Failures are normal in the non-legacy case for ultimately legacy downloads.
     # Do not output to stderr, since output to stderr is considered an error.
-    say "Downloading primary link $download_link"
-
+    # David: say "Downloading primary link $download_link"
+	
     # The download function will set variables $http_code and $download_error_msg in case of failure.
-    download "$download_link" "$zip_path" 2>&1 || download_failed=true
+    # David: download "$download_link" "$zip_path" 2>&1 || download_failed=true
+	
+	# Remove old dotnet-sdk tar file in tmp dir if exists
+	[ -f "$zip_path/dotnet-dev-debian-x64.tar.gz" ] && echo "Removing old dotnet-sdk tar file at: '$zip_path/dotnet-dev-debian-x64.tar.gz'" && rm -f "$zip_path/dotnet-dev-debian-x64.tar.gz"
+	[ -f "$zip_path/dotnet-dev-debian-x64.tar.gz" ] && rm -f "$zip_path/dotnet-dev-debian-x64.tar.gz"
+	[ -f "$zip_path/dotnet-dev-debian-x64.tar.gz" ] && echo "Error - Failed to remove dotnet-sdk tar file at: '$zip_path/dotnet-dev-debian-x64.tar.gz'" && exit 1
 
+	say "Copying dotnet-sdk tar file from: /tmp/dotnet/dotnet-dev-debian-x64.tar.gz to: $zip_path"
+	
+	
     #  if the download fails, download the legacy_download_link
+	
     if [ "$download_failed" = true ]; then
         primary_path_http_code="$http_code"; primary_path_download_error_msg="$download_error_msg"
         case $primary_path_http_code in
